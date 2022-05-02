@@ -1,29 +1,43 @@
-import Player  from './Player';
+import Player from './Player';
 import { Round } from './Round';
 
 export default class Game {
-    name: string;
-    players: Player[];
-    rounds: Round[];
-    currentRound: number;
-    dateCreated: Date;
+  static instance: Game;
 
-    constructor(name: string, players: Player[]) {
-        this.name = name;
-        this.players = players;
-        this.rounds = [];
-        this.currentRound = 1;
-        this.dateCreated = new Date(Date.now());
+  name: string;
+  players: Player[] = [];
+  rounds: Round[] = [];
+  currentRound: number = 1;
+  dateCreated: Date = new Date(Date.now());
+
+  private constructor(name: string, players: Player[]) {
+    this.name = name;
+    this.players = players;
+  }
+
+  static getInstance(name?: string, players?: Player[]) {
+    if (name && players) {
+      if (!Game.instance) {
+        console.log('Game created');
+        Game.instance = new Game(name, players);
+      }
+      return Game.instance;
     }
+  }
 
-    startRound(scores:Player[]) {
-        this.rounds.push(new Round(this.currentRound, scores));
-    }
+  //create overload method to getInstance method with no parameners
 
-    endRound(round: number, scores: {player:string, score:number}[]) {
-        this.currentRound++;
-        this.rounds[round-1].endRound(scores);
-    }
-    
+  startRound(scores: Player[]) {
+    console.log('Start of new round');
+    this.rounds.push(new Round(this.currentRound, scores));
+  }
 
+  endRound(scores: { player: string; score: number }[]) {
+    this.rounds[this.currentRound].endRound(scores);
+    this.currentRound++;
+  }
+
+  toString() {
+    return JSON.stringify(this);
+  }
 }

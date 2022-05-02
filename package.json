@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
+    "@reduxjs/toolkit": "^1.8.1",
     "random-words": "^1.1.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "6"
+    "react-redux": "^8.0.1",
+    "react-router-dom": "6",
+    "redux": "^4.2.0"
   },
   "devDependencies": {
     "@types/random-words": "^1.1.2",

@@ -1,4 +1,4 @@
-import { Player } from './Player';
+import Player from './Player';
 
 export class Round {
   number: number;
@@ -16,7 +16,8 @@ export class Round {
         ...player,
         score:
           player.score -
-          finalScores.find((score) => score.player === player.name).score,
+          (finalScores.find((score) => score.player === player.name)?.score ||
+            0),
       };
     });
   }

@@ -4,6 +4,8 @@ import randomWord from 'random-words';
 import { useNavigate } from 'react-router-dom';
 import Game from './../../classes/Game';
 import Player from '../../classes/Player';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { start } from '../redux/features/gameSlice';
 
 
 
@@ -17,17 +19,19 @@ const NewGame = () => {
     return players;
   };
 
-  const [gameName, setGameName] = useState(randomWord());
+  const [gameName, setGameName] = useState('Game - '+Date.now());
   const [players, setPlayers] = useState(['Player 1', 'Player 2']);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   return (
     <div className='bg-slate-200 h-screen'>
-      <p className='text-xl'>Game - {gameName}</p>
+      <p className='text-xl'>{gameName}</p>
       <div>
         <p className='text-xl'>Players</p>
         {players.map((player) => {
           return (
             <Editable
+              key={player}
               value={player}
               onDone={(name) =>
                 setPlayers(players.map((p) => (p === player ? name : p)))
@@ -80,9 +84,10 @@ const NewGame = () => {
           } else {
             window.localStorage.setItem('games', JSON.stringify([gameName]));
           }
-          const players_objects = getPlayers(players);
-          const newGame = new Game(gameName, players_objects);
+
+          const newGame = Game.getInstance(gameName, getPlayers(players));
           window.localStorage.setItem('game-object', JSON.stringify(newGame));
+          dispatch(start(newGame as Game));
           navigate('/current', { replace: true });
         }}
       >
