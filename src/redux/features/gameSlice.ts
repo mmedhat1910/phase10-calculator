@@ -22,8 +22,8 @@ export const gameSlice = createSlice({
       state.value = undefined;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    addRound: (state, action: PayloadAction<Round>) => {
-      state.value?.rounds.push(action.payload);
+    startRound: (state) => {
+      state.value?.startRound(state.value?.players || []);
     },
     endRound: (
       state,
@@ -34,7 +34,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { start,stop, addRound, endRound } = gameSlice.actions;
+export const { start, stop, startRound, endRound } = gameSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectGame = (state: RootState) => state.game.value;

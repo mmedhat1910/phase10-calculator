@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Game from './../../classes/Game';
 import Player from '../../classes/Player';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { start } from '../redux/features/gameSlice';
+import { start, startRound } from '../redux/features/gameSlice';
 
 
 
@@ -87,6 +87,7 @@ const NewGame = () => {
 
           const newGame = Game.getInstance(gameName, getPlayers(players));
           window.localStorage.setItem('game-object', JSON.stringify(newGame));
+          console.log(newGame)
           dispatch(start(newGame as Game));
           navigate('/current', { replace: true });
         }}

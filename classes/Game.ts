@@ -13,6 +13,7 @@ export default class Game {
   private constructor(name: string, players: Player[]) {
     this.name = name;
     this.players = players;
+    this.startRound(players);
   }
 
   static getInstance(name?: string, players?: Player[]) {
@@ -35,6 +36,10 @@ export default class Game {
   endRound(scores: { player: string; score: number }[]) {
     this.rounds[this.currentRound].endRound(scores);
     this.currentRound++;
+  }
+
+  static setInstanceJSON(instance:Game){
+    Game.instance = instance;
   }
 
   toString() {

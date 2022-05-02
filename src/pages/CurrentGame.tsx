@@ -2,18 +2,26 @@ import React, { useState , useEffect} from 'react';
 import Editable from '../components/Editable';
 import randomWord from 'random-words';
 import Game from '../../classes/Game';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { start } from '../redux/features/gameSlice';
+import { useNavigate } from 'react-router-dom';
 const CurrentGame = () => {
   const [players, setPlayers] = useState([] as string[]);
-  const [game, setGame] = useState(null as Game | null);
   const [changed, setChanged] = useState(false)
-  
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   useEffect(() =>{
     if(typeof window !== 'undefined'){
       // const gameName = window.localStorage.getItem('current-game') as string;
       // const players = JSON.parse(window.localStorage.getItem('players') as string)
       // setPlayers(players);
-      // const g = JSON.parse(window.localStorage.getItem('game-object') as string)
+      const g = JSON.parse(window.localStorage.getItem('game-object') as string)
+      if(g){
+        dispatch(start(g))
+      }else{
+        navigate('/new', { replace: true })
+      }
+
       // console.log('Here2',g);
       // if(changed){
       //   console.log(game)
@@ -23,16 +31,16 @@ const CurrentGame = () => {
       //   setGame(g as Game);
       // }
     }
-  },[game])
-  const gameState = useAppSelector((state) => state.game.value);
-  console.log(gameState)
+  },[])
+  const game = useAppSelector((state) => state.game.value);
+  console.log(game)
     return (
       <div className='bg-slate-200 h-screen'>
       <p className="text-xl">{game?.name}</p>
       <p className="text-lg">Round: {game?.currentRound}</p>
       Rounds
       {game?.rounds?.map((round)=>{
-        return <div>
+        return <div key={round.number}>
           <p>{round?.number}</p>
         </div>
       })}
